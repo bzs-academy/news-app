@@ -1,8 +1,10 @@
-import React from 'react'
+import React from 'react';
+import {Link} from 'react-router-dom';
 
 function NewsCard(props) {
     return (
-        <div className="card text-dark" style={{width: "18rem"}}>
+        <div className={"card text-dark m-2 " + props.additionClass}
+            style={{width: props.width}}>
             <img className="card-img-top"       
                 src={props.urlToImage}
                 alt="Card image cap"
@@ -10,7 +12,7 @@ function NewsCard(props) {
             <div className="card-body">
                 <h5 className="card-title">{props.title}</h5>
                 <p className="card-text">{props.description}</p>
-                <a href="#" className="btn btn-primary">Go somewhere</a>
+                <button  className="btn btn-primary">Read More</button>
             </div>
         </div>
     )
