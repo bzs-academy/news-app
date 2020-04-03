@@ -12,7 +12,9 @@ function NewsCard(props) {
             <div className="card-body">
                 <h5 className="card-title">{props.title}</h5>
                 <p className="card-text">{props.description}</p>
-                <button  className="btn btn-primary">Read More</button>
+                <button
+                onClick = {props.click}
+                className="btn btn-primary">Read More</button>
             </div>
         </div>
     )

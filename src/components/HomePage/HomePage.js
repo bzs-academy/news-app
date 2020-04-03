@@ -5,8 +5,9 @@ import axios from 'axios';
 
 export class HomePage extends Component {
 
+    
+
     state = {
-        isUpdated: false,
         data:
         [
             {
@@ -19,25 +20,45 @@ export class HomePage extends Component {
                 title: "Test 2",
                 description: "Test 2 Content"
             }
-        ]
+        ],
+        activeNewIndex: 0,
+        newsDetail: null
     }
 
     componentDidMount() {
-        const url = 'http://newsapi.org/v2/top-headlines?' +
-            'country=de&' +
-            'apiKey=78961d7c864d4c77a95f173e437d7af1';
-        if (!this.state.isUpdated) {
+        console.log(this.props.category)
+
+
+        const urlBase = 'https://newsapi.org/v2/top-headlines?';
+        const country = this.props.country!==null?`country=${this.props.country}&`:'country=us&';
+        const urlApi = 'apiKey=78961d7c864d4c77a95f173e437d7af1';
+        const category = this.props.category!==null?`category=${this.props.category}&`:'';
+
+        const url = urlBase + country + category + urlApi;
+            
+        console.log(url)
+            
             axios.get(url)
             .then(result=>{
                 console.log(result);
                 this.setState({data:result.data.articles});
-                this.setState({isUpdated:true});
+                
             })
             .catch(err=>console.log(err));
-        }
+            console.log('[HomePage]: componentDidMount is done');
+    }
+
+    
+
+    componentDidUpdate() {
+        console.log('[HomePage]: componentDidUpdate started');
+        const i = this.state.activeNewIndex;
+        console.log('i:'+ i)
+        console.log('[HomePage]: componentDidUpdate is done');
     }
 
     render() {
+        console.log('[HomePage]: render is done');
         /* 
         // destructuring
         const {urlToImage,title,description} = item; 
@@ -50,25 +71,45 @@ export class HomePage extends Component {
         // spread operator
         const urlToImage = {...item}  
         */
-       
+
+        
+
+        const updateActiveNewIndex = (index) => {
+            console.log('before update state/','current state index:' + this.state.activeNewIndex, 'coming  index:' +index);
+            this.setState({activeNewIndex:index});
+            
+        }
+        
+        console.log('after update state/','current state index:' + this.state.activeNewIndex);
+
         const news = this.state.data.map((item, i)=>{
             return(
                 <NewsCard
+                    click={()=>updateActiveNewIndex(i)}
                     width='18rem'
                     {...item}
                 />
             );
         });
+        
+        console.log(this.state.activeNewIndex);
+        const i = this.state.activeNewIndex;
+
+        const visitUrlHandler = () => {
+            window.location.href = this.state.data[i].url;
+        }
+        
         return (
             <div>
                 <div className="col-md-4 col-sm-6 vh-100 bg-success float-left bg-light">
                 <NewsCard
+                    click = {visitUrlHandler}
                     className = "w-100"
                     additionClass="border-0 bg-light"
                     width="100"
-                    urlToImage ={this.state.data[0].urlToImage}
-                    title ={this.state.data[0].title}
-                    description ={this.state.data[0].content}
+                    urlToImage ={this.state.data[i].urlToImage}
+                    title ={this.state.data[i].title}
+                    description ={this.state.data[i].content}
                 />
 
                 </div>
